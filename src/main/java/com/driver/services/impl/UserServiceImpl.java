@@ -44,12 +44,12 @@ public class UserServiceImpl implements UserService {
 
         country.setUser(user);
         user.setOriginalCountry(country);
-        userRepository3.save(user);
+        user=userRepository3.save(user);
 
-        String countryCode= CountryName.valueOf(countryName).toCode();
-        System.out.println("Helllo "+countryCode);
+//        String countryCode= CountryName.valueOf(countryName).toCode();
+//        System.out.println("Helllo "+countryCode);
 
-        user = userRepository3.save(user);
+        //user = userRepository3.save(user);
 
         user.setOriginalIp(new String(user.getOriginalCountry().getCode() + "." + user.getId()));
 
