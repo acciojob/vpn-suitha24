@@ -24,6 +24,18 @@ public class ServiceProvider {
     @OneToMany(mappedBy = "serviceProvider", cascade = CascadeType.ALL)
     List<Connection> connectionList;
 
+    public ServiceProvider() {
+    }
+
+    public ServiceProvider(int id, String name, Admin admin, List<Country> countryList, List<User> users, List<Connection> connectionList) {
+        this.id = id;
+        this.name = name;
+        this.admin = admin;
+        this.countryList = countryList;
+        this.users = users;
+        this.connectionList = connectionList;
+    }
+
     public int getId() {
         return id;
     }

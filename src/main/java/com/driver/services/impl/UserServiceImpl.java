@@ -1,5 +1,6 @@
 package com.driver.services.impl;
 
+import com.driver.model.Country;
 import com.driver.model.CountryName;
 import com.driver.model.ServiceProvider;
 import com.driver.model.User;
@@ -32,26 +33,39 @@ public class UserServiceImpl implements UserService {
         catch (Exception e){
             throw new Exception("Country not Found");
         }
+        Country country = new Country();
+        country.setCountryName(CountryName.valueOf(countryName.toString()));
+        country.setCode(CountryName.valueOf(countryName).toCode());
 
         User user=new User();
         user.setPassword(password);
         user.setUsername(username);
         user.setConnected(false);
-        String countryCode= CountryName.valueOf(countryName).toCode();
+
+        country.setUser(user);
+        user.setOriginalCountry(country);
         userRepository3.save(user);
+
+        String countryCode= CountryName.valueOf(countryName).toCode();
+        System.out.println("Helllo "+countryCode);
+
+        user = userRepository3.save(user);
+
+        user.setOriginalIp(new String(user.getOriginalCountry().getCode() + "." + user.getId()));
+
+        user = userRepository3.save(user);
         return user;
     }
 
     @Override
     public User subscribe(Integer userId, Integer serviceProviderId) {
-        //ServiceProvider serviceProvider=serviceProviderRepository3.findById(serviceProviderId).get();
-//        List<User> users=serviceProvider.getUsers();
-//        User user=userRepository3.findById(userId).get();
-//        users.add(user);
-//        serviceProvider.setUsers(users);
-//        serviceProviderRepository3.save(serviceProvider);
-//        List<ServiceProvider> serviceProviderList=userRepository3.findServiceProv(userId);
-//        serviceProviderList.add(serviceProvider);
-        return null;
+
+        ServiceProvider serviceProvider=serviceProviderRepository3.findById(serviceProviderId).get();
+        User user=userRepository3.findById(userId).get();
+        user.getServiceProviderList().add(serviceProvider);
+        serviceProvider.getUsers().add(user);
+        serviceProviderRepository3.save(serviceProvider);
+
+        return user;
     }
 }

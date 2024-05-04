@@ -37,12 +37,12 @@ public class AdminServiceImpl implements AdminService {
     public Admin addServiceProvider(int adminId, String providerName) {
 
         ServiceProvider newServiceProvider=new ServiceProvider();
-        newServiceProvider.setAdmin(adminRepository1.findById(adminId).get());
-        newServiceProvider.setName(providerName);
-        serviceProviderRepository1.save(newServiceProvider);
         Admin admin=adminRepository1.findById(adminId).get();
+        newServiceProvider.setAdmin(admin);
+        newServiceProvider.setName(providerName);
+        //serviceProviderRepository1.save(newServiceProvider);
         //get curr list & add in that
-        List<ServiceProvider> serviceProviderList=serviceProviderRepository1.findByAdmin(adminId);
+        List<ServiceProvider> serviceProviderList=admin.getServiceProviders();
         serviceProviderList.add(newServiceProvider);
         admin.setServiceProviders(serviceProviderList);
         adminRepository1.save(admin);
@@ -60,14 +60,11 @@ public class AdminServiceImpl implements AdminService {
             throw new Exception("Country not found");
         }
         ServiceProvider serviceProvider=serviceProviderRepository1.findById(serviceProviderId).get();
-        List<Country> countriesList=serviceProvider.getCountryList();
-        Country name=new Country();
-        name.setCountryName(CountryName.valueOf(countryName));
-        name.setCode(CountryName.valueOf(countryName).toCode());
-        name.setServiceProvider(serviceProviderRepository1.findById(serviceProviderId).get());
-        countryRepository1.save(name);
-        countriesList.add(name);
-        serviceProvider.setCountryList(countriesList);
+        Country country=new Country();
+        country.setCountryName(CountryName.valueOf(countryName));
+        country.setCode(CountryName.valueOf(countryName).toCode());
+        country.setServiceProvider(serviceProvider);
+        serviceProvider.getCountryList().add(country);
         serviceProviderRepository1.save(serviceProvider);
         return serviceProvider;
     }

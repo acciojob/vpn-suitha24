@@ -10,10 +10,13 @@ public class Country {
     int id;
     CountryName countryName;
     String code;
-    @OneToOne
-    User user;
+
+    @ManyToOne
     @JoinColumn
-    @ManyToOne//(mappedBy = "serviceProvider")
+    User user;
+
+    @OneToOne
+    @JoinColumn
     ServiceProvider serviceProvider;
 
     public Country(int id, CountryName countryName, String code, User user, ServiceProvider serviceProvider) {
