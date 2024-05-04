@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
             CountryName.valueOf(countryName);
         }
         catch (Exception e){
-            throw new Exception("Country not Found");
+            throw new Exception("Country not found");
         }
         Country country = new Country();
         country.setCountryName(CountryName.valueOf(countryName.toString()));
